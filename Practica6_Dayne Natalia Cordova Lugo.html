@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica 6</title>
+    <script>
+
+
+/*1.  Dada una estructura que contiene carpetas y archivos, detecte y liste los nombres de los archivos cuya 
+fecha de creación sea anterior al año 2024 y cuyo tamaño sea mayor a 500 KB. Utilice un bucle anidado 
+para iterar primero sobre las carpetas y luego sobre los archivos. */
+
+         const estructuraSistema = [ 
+            { nombre: "Config", archivos: [{ nombre: "setup.ini", sizeKB: 10, fecha: "2024-03-01" }] }, 
+            { nombre: "Logs", archivos: [{ nombre: "old_log_1.txt", sizeKB: 600, fecha: "2023-11-20" }, 
+            { nombre: "new_log_2.txt", sizeKB: 50, fecha: "2024-01-15" }] }, 
+            { nombre: "Assets", archivos: [{ nombre: "bg_old.jpg", sizeKB: 750, fecha: "2023-05-10" },  
+            { nombre: "icon.png", sizeKB: 20, fecha: "2024-06-01" }] } 
+        ];
+
+        for(let carpeta of estructuraSistema){
+            for(let archivo of carpeta.archivos){
+
+                let año  = archivo.fecha.slice(0,4);
+
+                if(año < 2024 && archivo.sizeKB > 500){
+                    console.log("Archivo: " + archivo.nombre);
+                }
+            }
+        }
+
+   
+ /*2. Valide un array de posibles cadenas de conexión a una base de datos. Una cadena se considera válida si: 
+a) No está vacía, y b) Contiene el esquema (https://) O la palabra clave de entorno (prod). Itere hasta 
+encontrar la primera cadena válida y detenga la búsqueda, o procese hasta un máximo de 4 intentos. */
+
+        const cadenasConexion = [ 
+            "",  
+            "dev-server-only",  
+            "https://prod-db-01",  
+            "prod-backup-server",  
+            "https://qa-server" 
+        ];     
+
+        let intentos = 0;
+        const MAX = 4;
+
+        for(let cadena of cadenasConexion){
+            intentos ++;
+            
+            
+            if(intentos > MAX){
+                break;
+            }
+
+            if(cadena != "" && (cadena.indexOf("https://") != -1 || cadena.indexOf("prod") != -1 )){
+                console.log("Cadena valida: " + cadena);
+                break;
+            } else{
+                console.log("Cadena invalida");
+            }
+        }
+
+
+  /*3. Agrupe una lista de eventos del sistema en tres categorías: "Éxito", "Advertencia", o "Error". Use la 
+estructura switch para manejar las diferentes etiquetas de eventos. 
+Reglas: 
+• "LOGIN_OK", "API_SUCCESS": Categoría "Éxito". 
+• "WARN_TIMEOUT", "RESOURCE_LOW": Categoría "Advertencia". 
+• "AUTH_FAIL", "DB_ERROR": Categoría "Error". 
+• Cualquier otro: Categoría "Desconocido". */
+
+        const eventos = ["LOGIN_OK", "AUTH_FAIL", "RESOURCE_LOW", "DB_ERROR", "API_SUCCESS", "EVENT_X"];       
+            
+
+        for(let evento of eventos){
+            switch(evento){
+                case "LOGIN_OK":
+                case "API_SUCCESS":
+                    console.log(evento + " : Exito ");
+                    break;
+                    
+                case "WARN_TIMEOUT":
+                case "RESOURCE_LOW":
+                    console.log(evento + " : Adevertencia ");
+                    break;
+
+                case "AUTH_FAIL":
+                case "DB_ERROR":
+                    console.log(evento + " : Error ");
+                    break;
+
+                default :
+                    console.log(evento + " : Desconocido");    
+                                   
+            }
+        }
+
+
+  /*4. Simule la paginación de un reporte. Dado un número total de registros y un límite de registros por página, 
+calcule y muestre cuántas páginas se generarán. Detenga el cálculo si el número total de páginas excede 
+las 10 (simulando un límite de impresión). */
+
+                const TOTAL_REGISTROS = 135; 
+                const REGISTROS_POR_PAGINA = 15; 
+                const MAX_PAGINAS = 10;       
+                            
+                    let paginas = 0;
+                    for(let i = 1; i <= TOTAL_REGISTROS; i += REGISTROS_POR_PAGINA ){
+                        paginas++;
+
+                        if(paginas > MAX_PAGINAS){
+                            console.log("se excede el limite de paginas");
+                            break;
+                        }
+                    }
+                console.log("Total de paginas: " + paginas);
+                
+                
+
+ /* 5. Simule una rutina que lee bloques de datos de una cola. El tamaño de cada bloque es fijo (15MB). El 
+proceso debe detenerse si el consumo total de memoria supera los 100MB. Muestre cuántos bloques se 
+procesaron antes de alcanzar el límite. */
+
+            const BLOQUE_MB = 15; 
+            const LIMITE_MB = 100;   
+            
+            let total = 0;
+            let bloques = 0;
+
+            while(total + BLOQUE_MB <= LIMITE_MB){
+                total += BLOQUE_MB;
+                bloques++;
+
+                console.log("Procesando bloques: " + bloques + " - Total: " + total + " MB");
+            }
+                console.log("Bloques Procesados: " + bloques);
+
+
+ /*6. Procese una lista de pedidos. Use la estructura switch para determinar la acción a realizar basándose en 
+el estado del pedido: 
+• "PENDIENTE" o "EN_PROCESO": Marcar como "INICIADO". 
+• "ENVIADO": Marcar como "COMPLETADO" y añadir $10$ puntos de fidelidad. 
+• "CANCELADO": Omitir el pedido (no hacer nada). */
+
+            const pedidos = [ 
+            { id: 1, estado: "PENDIENTE" }, 
+            { id: 2, estado: "ENVIADO" }, 
+            { id: 3, estado: "CANCELADO" }, 
+            { id: 4, estado: "EN_PROCESO" } 
+            ]; 
+
+            let puntos = 0;
+
+            for(let pedido of pedidos){
+                switch(pedido.estado){
+                    case "PENDIENTE":
+                    case "EN_PROCESO":
+                        console.log("Pedido " + pedido.id + " INICIADO");
+                        break;
+                    
+                    case "ENVIADO":
+                        console.log("Pedido " + pedido.id + " COMPLETADO");
+                        puntos += 10;
+                        break;
+                        
+                    case "CANCELADO":
+                        continue;
+                        
+                    default:
+                        console.log("Estado Desconocido");    
+
+                }
+            }
+
+            console.log("Puntos de fidelidad: " + puntos);
+
+
+ /*7. Desactive la cuenta de los usuarios que no tienen ninguna actividad registrada en el último mes. 
+Reglas: Use un bucle externo (for...of) para iterar sobre los usuarios y un bucle interno (for...of) para iterar sobre 
+sus actividades. Si encuentra una sola actividad en el último mes (lastMonth: true), pase al siguiente usuario 
+(continue en el bucle externo). Si el bucle interno finaliza sin encontrar actividad, desactive al usuario. */
+
+                const usuarios = [ 
+                { id: 1, activo: true, actividades: [{ lastMonth: false },{ lastMonth: false }] }, 
+                { id: 2, activo: true, actividades: [{ lastMonth: true },{ lastMonth: false }] }, 
+                { id: 3, activo: true, actividades: [{ lastMonth: false },{ lastMonth: false }] } 
+                ];            
+                
+                    
+                for(let usuario of usuarios){
+                    let tieneActividad =false;
+                    for(let act of usuario.actividades){
+                        if(act.lastMonth == true){
+                            tieneActividad =true;
+                            break;
+                        }
+                    }
+
+                    if(tieneActividad){
+                        continue;
+                    }
+
+                    usuario.activo = false;
+                }
+
+                console.log(usuarios);
+                
+</script>
+</head>
+<body>
+    
+</body>
+</html>

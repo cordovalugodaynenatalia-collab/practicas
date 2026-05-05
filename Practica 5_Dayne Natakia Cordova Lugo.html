@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica 5</title>
+<script>
+/*1. Dada una lista de transacciones bancarias, calcule la suma total de los montos que sean depósitos (montos 
+positivos) y que superen los $100.00. Detenga la iteración tan pronto como la suma acumulada supere los 
+$500.00. 
+Datos de Entrada: */
+    const transacciones = [80.50, -20.00, 150.00, 300.00, 75.00, 250.00, 1000.00];
+    let suma = 0;
+    for (let monto of transacciones){
+         if(monto > 100){
+            suma += monto;
+        }
+
+         if(monto > 500){
+            break;
+        }
+
+    }
+
+    console.log("el total de las sumas es:", suma);
+
+
+/*2. Se tiene una lista de códigos de tickets de soporte. Clasifique cada ticket basado en el prefijo del código e 
+imprima el mensaje correspondiente.
+    "BUG-": Error del sistema. 
+    "FEAT-": Solicitud de nueva funcionalidad. 
+    "ADM-": Tarea administrativa. 
+    Otros: Tipo no reconocido. */
+
+   const tickets = ["BUG-401", "FEAT-105", "ADM-002", "INFO-010", "BUG-402"];
+   for(let ticket of tickets){
+    let prefijo = ticket.slice(0,ticket.indexOf("-") + 1);
+
+    switch(prefijo){
+        case "BUG-": 
+        console.log("Error del sistema");
+        break; 
+
+        case "FEAT-":
+        console.log("Solicitud de nueva funcionalidad");
+        break;
+        
+        case "ADM-":
+        console.log("Tarea administrativa");
+        break;
+        
+        default:
+            console.log("Tipo no reconocido");
+    }
+   }
+
+
+   /*3. Simule el intento de conexión a un servidor. Debe intentarlo al menos una vez y reintentar hasta un máximo de 
+4 veces si la conexión inicial falla. La conexión tiene un 20\% de probabilidad de ser exitosa*/
+
+
+            let intentos = 0;
+            const MAX_INTENTOS = 4;
+            let conectado = false;
+
+            do {
+                intentos++;
+
+                console.log("Intento " + intentos);
+
+                if (Math.random() < 0.2) {
+                    conectado = true;
+                    console.log("Conectado exitosamente");
+                    break;
+                } else {
+                    console.log("Fallo la conexión");
+                }
+
+            } while (intentos < MAX_INTENTOS);
+
+            if (!conectado) {
+                console.log("No se pudo conectar después de " + MAX_INTENTOS + " intentos");
+            }
+
+/*4. Busque en un array de archivos el primer archivo que sea un documento PDF (termina en .pdf) y que tenga el 
+permiso de lectura (read: true). Si lo encuentra, imprima su nombre y detenga la búsqueda inmediatamente. */
+
+            const archivosSistema = [ 
+        { nombre: "script.js", read: true, write: true }, 
+        { nombre: "documento.pdf", read: false, write: false }, 
+        { nombre: "manual.pdf", read: true, write: false }, 
+        { nombre: "imagen.jpg", read: true, write: false } 
+        ];
+
+    for(let archivo of archivosSistema){
+        if(archivo.nombre.slice(-4) == ".pdf" && archivo.read == true) {
+            console.log("Archivos enocontrados: " + archivo.nombre);
+            break;
+        }
+    }    
+
+/*5. Dado un objeto de configuración que contiene variables de entorno, muestre solo aquellas variables cuyo 
+valor sea una cadena de texto (string) y que no contengan la palabra "DEV" (para omitir configuraciones de 
+desarrollo en producción). */
+
+        const config = { PORT: 3000, 
+        DB_HOST: "prod_db_host", 
+        LOG_LEVEL: "info", 
+        DEV_FLAG: true, 
+        DEV_DB_USER: "dev_user_ignore" 
+        };
+
+        for(let clave in config){
+            let valor = config[clave];
+
+            if(typeof valor === "string" && clave.indexOf('DEV') == -1){
+                console.log(clave + ": " + valor );
+            }
+
+        }
+
+ /*6. Calcule la puntuación final de un jugador. Comience con $100$ puntos. Por cada error crítico (critico: 
+true), penalice con $20$ puntos. Por cada acción exitosa (success: true), bonifique con $10$ puntos. Si 
+la puntuación cae por debajo de $50$, imprima una advertencia, pero continúe el cálculo.Estructuras 
+clave: for, if/else if, continue.*/ 
+                const acciones = [ 
+                { type: 'carga', success: true, critico: false }, 
+                { type: 'calculo', success: false, critico: true }, 
+                { type: 'render', success: true, critico: false }, 
+                { type: 'envio', success: true, critico: false }, 
+                { type: 'auth', success: false, critico: true } 
+                ];
+
+                let puntos = 100;
+
+                for (let accion of acciones) {
+
+                    if (accion.critico == true) {
+                        puntos -= 20;
+                        continue; 
+                    } else if (accion.success == true) {
+                        puntos += 10;
+                    }
+
+                    if (puntos < 50) {
+                        console.log("Advertencia: puntuación baja");
+                    }
+                }
+
+                console.log("Puntuación final: " + puntos);
+
+
+/*7. Dado un objeto de datos de un formulario de registro, itere sobre sus propiedades. Si la propiedad es la 
+contraseña (password), muestre solo su clave. Si la propiedad es la edad (age) y es menor a 18, detenga 
+la validación inmediatamente (break). Para el resto de las propiedades, muestre la clave y el valor. */
+
+                const datosFormulario = { 
+                username: "dev_user", 
+                email: "user@example.com", 
+                password: "secure_password123", 
+                age: 25, 
+                role: "admin" 
+                }; 
+
+
+               for(let clave in datosFormulario){
+                let valor = datosFormulario[clave];
+                if(clave == "password"){
+                    console.log("password");
+                } else if(clave == "age" && valor<18){
+                    console.log("Edad no permitida");
+                    break;
+                } else {
+                    console.log(clave + " : " + valor);
+                }
+
+               }  
+                
+</script>
+
+</head>
+<body>
+    
+</body>
+</html>
